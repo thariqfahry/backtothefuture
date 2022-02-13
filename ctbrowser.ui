@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>981</width>
+    <height>463</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>CT browser - no file opened</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>951</width>
+      <height>391</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="grid">
+     <item row="0" column="4">
+      <widget class="QLabel" name="slice_label">
+       <property name="text">
+        <string>0/0</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QPushButton" name="next">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>30</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" colspan="7">
+      <widget class="QLabel" name="viewport">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="scaledContents">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="prev">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>30</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>&lt;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="7">
+      <spacer name="_horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="0" column="0" rowspan="2">
+      <widget class="QListWidget" name="list">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>600</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="6">
+      <widget class="QSlider" name="slider">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>50</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>800</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="maximum">
+        <number>99</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="5">
+      <widget class="QCheckBox" name="highlight">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>HL</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="axis_label">
+       <property name="text">
+        <string>2</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1" colspan="2">
+      <widget class="QCheckBox" name="valid">
+       <property name="text">
+        <string>Valid</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3" colspan="4">
+      <widget class="QLineEdit" name="comment"/>
+     </item>
+     <item row="2" column="7">
+      <widget class="QPushButton" name="save">
+       <property name="text">
+        <string>Save</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>981</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>next</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>nextclicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>45</x>
+     <y>36</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>368</x>
+     <y>224</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>list</sender>
+   <signal>itemDoubleClicked(QListWidgetItem*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>load()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>310</x>
+     <y>226</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>490</x>
+     <y>231</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>list</sender>
+   <signal>itemSelectionChanged()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>preview()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>310</x>
+     <y>226</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>490</x>
+     <y>231</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>slide()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>771</x>
+     <y>42</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>490</x>
+     <y>231</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>prev</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>prevclicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>631</x>
+     <y>43</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>490</x>
+     <y>231</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>highlight</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>highlight_checkbox_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>740</x>
+     <y>43</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>490</x>
+     <y>231</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>save</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>saveclicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>913</x>
+     <y>409</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>490</x>
+     <y>231</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>nextclicked()</slot>
+  <slot>load()</slot>
+  <slot>preview()</slot>
+  <slot>slide()</slot>
+  <slot>prevclicked()</slot>
+  <slot>highlight_checkbox_changed()</slot>
+  <slot>saveclicked()</slot>
+ </slots>
+</ui>
