@@ -82,11 +82,14 @@ class Window(QMainWindow):
         
         #Generate MPS plot and highlight gap.
         self.plot = gl(bu.get_max_per_slice(self.image3d))
-        self.image3d_h, self.gap_width = bu.highlight_gap(self.image3d.copy(), tolerate_upto = 1.3)
+        self.image3d_h, self.gap_width = bu.highlight_gap(self.image3d.copy(), tolerate_upto = 1)
         
-        #Enable the slider and set its maximum value to the number of slices along the current axis. Enable checkbox.
+        #Enable the slider and set its maximum value to the number of slices along the current axis. Set its position to halfway.
         self.slider.setEnabled(True)
         self.slider.setMaximum(self.image3d.shape[self.axis]-1)
+        self.slider.setSliderPosition(self.slider.maximum()//2)
+        
+        #Enable checkbox.
         self.highlight.setEnabled(True)
         
         #Indicate CT path in window title.
@@ -98,12 +101,12 @@ class Window(QMainWindow):
         slicer = (slice(None),)*self.axis+(position,)
         ctslice = self.image3d_h[slicer] if self.highlight.isChecked() else self.image3d[slicer]
         
-        #Beautify&resize the image.
-        image = br(ctslice, 0.75) #some resize factors cause misdrawing of pixmap
-        
         # Find min/maxes
-        min_pixel = image.min()
-        max_pixel = image.max()
+        min_pixel = ctslice.min()
+        max_pixel = ctslice.max()
+        
+        #Beautify&resize the image.
+        image = br(ctslice, 1) #some resize factors cause misdrawing of pixmap
         
         #Attach the generated MPS plot and overlay info text.
         image = stitch(image, self.plot)
@@ -140,8 +143,7 @@ class Window(QMainWindow):
         
         self.df.loc[self.df['sample'] == samplename, 'comment'] = self.comment.text()
         self.df.loc[self.df['sample'] == samplename, 'valid'] = int(bool(self.valid.checkState()))
-        
-        pass
+    
 
     def closeEvent(self, event):
         self.df.to_csv('output_data.csv', index=False)
