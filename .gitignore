@@ -2,3 +2,8 @@ previews/*
 *.pyc
 *.png
 *.zip
+*.bmp
+*.csv
+*.txt
+*.bak
+*.bak1
