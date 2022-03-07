@@ -1,6 +1,6 @@
 from functools import lru_cache
 import os, itk, numpy as np, cv2 as cv
-
+from pathlookup import pathlookup
 
 def find(path, substring):
     results = []
@@ -32,26 +32,46 @@ def beautify_and_resize(image, resize_factor):
     return image
 
 
-# TODO does it matter that this is a mutable object being hashed?
 class HashableNDArray(np.ndarray):
     def __hash__(self):
         return hash(self.tobytes())
-    
 
+
+def mycache(loud = False):
+    def decorator(func):
+        cache = {}
+        def wrapper(*args, **kwargs):
+            
+            key = hash(args[0])
+            if key in cache:
+                if loud:
+                    print("cache hit", key)
+                return cache[key]
+            else:
+                if loud:
+                    print("cache miss", key)
+                result = func(*args, **kwargs)
+                cache[key] = result
+                return result
+        
+        wrapper.cache = cache
+        return wrapper
+    return decorator
+
+
+#read isq file
+def r(path_or_samplename):
+    if not os.path.exists(path_or_samplename):
+        path_or_samplename = pathlookup[path_or_samplename]
+        
+    return np.asarray(itk.imread(path_or_samplename, imageio=itk.ScancoImageIO.New())).view(HashableNDArray)
+    
+@mycache()
 def get_max_per_slice(image3d):
-    
-    if hash(image3d) in get_max_per_slice.cache:
-        return get_max_per_slice.cache[hash(image3d)]
-    
     #Get value of brightest pixel in each slice: amax along axes (1,2).
     maxarr = np.amax(image3d,(1,2))
     
-    #Update cache dictionary with {hash:result}.
-    get_max_per_slice.cache[hash(image3d)] = maxarr
-    
     return maxarr
-
-get_max_per_slice.cache = {}
 
 
 #Ignore the first and last 1/Xth of slices of an array.
@@ -104,7 +124,7 @@ def contains_valid_gap(image3d, tolerate_upto = 1):
 
 
 #Add 2000 to the raw CT intensity of the suspected gap slices.
-def highlight_gap(image3d, tolerate_upto = 2):
+def highlight_gap(image3d, tolerate_upto = 1):
     gap_indices = get_all_gap_slice_indices(image3d, tolerate_upto)
     
     #print('gap indices were ', gap_indices)
@@ -113,7 +133,7 @@ def highlight_gap(image3d, tolerate_upto = 2):
     image3d[gap_indices] = image3d[gap_indices] + 2000
     return image3d, len(gap_indices)
 
-
+@mycache()
 def get_area_of_biggest_contour(ctslice, blur = 15):
     
     #Apply a simple kernel blur to the image.
@@ -135,20 +155,62 @@ def get_area_of_biggest_contour(ctslice, blur = 15):
         (x,y), radius = cv.minEnclosingCircle(biggest_contour)
         
         area = cv.contourArea(biggest_contour)
-        circularity = area / (3.1415*(radius**2))
         
-        return area, circularity
+        #circularity = area / (3.1415*(radius**2)) #unused
+        
+        return area
     
-    return 0, 0
+    return 0
 
-
+@mycache()
 def get_cont_area_profile(image3d, blur = 15):
     return [get_area_of_biggest_contour(ctslice, blur) for ctslice in image3d]
 
+def index_of_max_circ(image3d):
+    cap = get_cont_area_profile(image3d)
+    circs = [i[1] for i in cap]
     
+    return circs.index(max(circs))
+
+def crsa_at_maximum_circ(image3d, blur = 15):
+    cap = get_cont_area_profile(image3d, blur)
+    circ = [i[1] for i in cap]
+    csa = cap[circ.index(max(circ))][0]
     
+    return csa
 
 
+def highlight_csa_slice(image3d, image3d_h = None, tolerate_upto = 1, offset = 100):
+    
+    if contains_valid_gap(image3d):
+        gap_indices = get_all_gap_slice_indices(image3d, tolerate_upto)
+        
+        #Get slices that are `offset` indices before the start of the gap
+        csa_candidate_slices = image3d[gap_indices.min() - offset : gap_indices.min()]
+        
+        #Calculate area of biggest contour in each slice.
+        slice_areas = get_cont_area_profile(csa_candidate_slices)
+        
+        #Out of these areas, pick the largest.
+        csa_relative_index = np.argmax(slice_areas)
+        slice_area = slice_areas[csa_relative_index]
+        
+        #Calculate absolute index of the slice with maximum CSA.
+        csa_absolute_index = gap_indices.min() - offset + csa_relative_index
+        
+        #Only highlight if a image3d_h array was passed to the function.
+        if image3d_h is not None:
+            #Highlight the slice whose CSA we've taken, but do it on the image3d_h array.
+            image3d_h[csa_absolute_index] = image3d_h[csa_absolute_index] + 2000
+        
+        
+        return slice_area, csa_absolute_index
+    
+    #If no valid gap in image3d, return 0
+    return 0, 0
+
+    
+    
 
 
 
