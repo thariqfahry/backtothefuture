@@ -1,5 +1,14 @@
-from bttf_utilities import find
+import os
 from ast import literal_eval
+
+def find(path, substring):
+    results = []
+    for root, directories, files in os.walk(path):
+        for filename in files:
+            if substring in filename:
+                results.append(os.path.join(root, filename))
+        
+    return results
 
 pathlookup= {}
 
